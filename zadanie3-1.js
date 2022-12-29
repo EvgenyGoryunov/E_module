@@ -23,7 +23,7 @@ function count_agr_in_arr() {
         else if (typeof (item) == 'string') {
             str += 1
         }
-        else other += 1
+        else { other += 1 }
     });
 
     console.log('всего элементов в массиве: ' + arr.length)
@@ -33,6 +33,36 @@ function count_agr_in_arr() {
     console.log('нечетных: ' + odd_num)
     console.log('строк: ' + str)
     console.log('всех остальных: ' + other)
+
 }
 
 count_agr_in_arr()
+
+
+// пример из модудя (не мое решение)
+function getTypeOfNumbers() {
+    const arr = [0, null, NaN, 0, 1, 2, 4, "str"]
+
+    let even = 0,
+        odd = 0,
+        zero = 0;
+
+    for (let i = 0; i < arr.length; i++) {
+        if (typeof arr[i] === 'number' && !isNaN(arr[i])) {
+            if (arr[i] === 0) {
+                zero += 1;
+            } else if (arr[i] % 2 === 0) {
+                even += 1;
+            } else {
+                odd += 1;
+            }
+        }
+    }
+
+    console.log('четных элементов: ', even)
+    console.log('нечетных элементов: ', odd)
+    console.log('нулей: ', zero)
+}
+
+getTypeOfNumbers()
+
