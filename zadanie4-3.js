@@ -1,22 +1,11 @@
 // Задание 3.
 
-// Написать функцию, которая создает пустой объект, но без прототипа.
+// Напишите функцию, которая создает пустой объект, но без прототипа.`)
 
 
-
-
-
-
-
-function test() {
+// Пример решения с модуля чей-то (не мой)
+const noProto = () => {
     return Object.create(null)
 }
 
-console.log(test())
-
-
-// Ошибка, кот возникает, если в скобках без (null)
-// zadanie4-3.js:2 Uncaught TypeError: Object prototype may only be an Object or null: undefined
-//     at Function.create (<anonymous>)
-//     at test (zadanie4-3.js:2:19)
-//     at zadanie4-3.js:5:13
+console.log(noProto())

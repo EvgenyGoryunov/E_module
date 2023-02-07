@@ -13,7 +13,7 @@ const people = {
 };
 
 
-// 1 вариант
+// 1 вариант - мой вариант
 functionTest = (str, obj) => {
     console.log('**********************************')
     console.log('functionTest')
@@ -31,7 +31,7 @@ functionTest('name', people)
 functionTest('qaz', people)
 
 
-// 2 вариант (более продвинутый)
+// 2 вариант - более продвинутый, чей-то из модуля
 TestTest = (str, obj) => {
     console.log('**********************************')
     console.log('TestTest')
