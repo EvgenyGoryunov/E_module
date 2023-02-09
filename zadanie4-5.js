@@ -40,25 +40,27 @@
 // создаем общий для всех классов класс с примерно общими свойствами
 // name - название устройства, wattage - мощность его эл.потребления,
 // category - категория (где в доме находится, кухня, комната, гараж), 
-// type - тип (электрический, мото), state - состояния прибора в данный момент
+// type - тип (электрический, бензоинструмент), state - состояния прибора в данный момент
 // (on - работает и потребляет энергию,  off - не работает), 
-// метод  turn.OnOff - метод включения или отключения прибора (меняет state и 
-// потребляемую мощность в данный момент)
+// метод  turn.OnOff - метод включения или отключения прибора (меняет state)
 
-// конструктор объектов, класс Устройства (Devise)
-class Devise {
+// конструктор объектов, класс Устройство (Devise)
+class Device {
     constructor(name, wattage, category, state) {
         this.name = name || 'not set'
         this.wattage = wattage || 0
         this.category = category || 'home'
         this.type = type || 'electric'
         this.state = state || 'off'
-        turn.OnOff(this)
+        // метод push - добавляет в конец списка данный объект, т.е. при создании
+        // нового объекта класса (прибора) будем автоматически добавлять его в список приборов
+        // и в дальнейшем, при итерации списка (по мощности и включению) будем получать мощность
+        devices.push(this)
     }
 
     // метод включения и отключения устройств
-    // при его вызове переменной state присваивается значение либо on (работает), либо off -
-    // не работает, выводится в консоль сообщение о состоянии и пересчитывается потребляемая 
+    // при его вызове переменной state присваивается значение on (работает), либо off -
+    // (не работает), выводится в консоль сообщение о состоянии и пересчитывается потребляемая 
     // в данный момент мощность эл.приборов
     energeOnOff() {
         if (this.state === 'off') {
@@ -72,23 +74,43 @@ class Devise {
         // powerTotal()
     }
 
-    // метод получения информации, если он работает (state == 1)
-    aboutDevise() {
+    // метод получения информации, если устройство работает (state == 'on')
+    aboutDevice() {
         if (this.state === 'on') {
             // usage(this.message)
             return `Устройство: ${this.name} ${this.category} ${this.type}.`
         } else return 'Устройство выключено'
     }
+
+    deviceWattage() {
+        if (this.state == 'on') return this.wattage
+        return 0
+    }
 }
 
 
 // массив (список) в который будем помещать сознанные нами устройства (для подсчета мощности
-// и из включения и отключения)
-const Devises = []
+// и если включен)
+const devices = []
 
 
-class GarageDevises extends Devises {
-    constructor(name, mode, wattage, category, type, state) {
+// фукнция подсчета общей мощности работающих эл.приборов
+// метод parseInt - преобразует строковый тип (мы мощность Вт строкой пишем) в числовой тип
+// power += число - аналогично power = power + число
+function getAllPowerOn() {
+    for (let device of devices) {
+        power += parseInt(device.getPower())
+    }
+    console.log('Суммарная мощность работающих эл.приборов: ' + power + 'Вт')
+    return power
+}
+
+
+
+// создадим новый дочерний класс GarageDevice от класса Device, унаследовав от него часть
+// свойст (от родительского класса) и добавив новый параметр - вес устройства (weight)
+class GarageDevice extends Device {
+    constructor(name, wattage, category, type, state, weight) {
         super(
             wattage,
             category,
@@ -97,6 +119,10 @@ class GarageDevises extends Devises {
         )
         this.name = name
         this.wattage = wattage
+        this.category = category
+        this.type = type
+        this.state = state
+        this.weight = weight
     }
 
     aboutDevise() {
