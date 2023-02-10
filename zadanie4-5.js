@@ -37,17 +37,40 @@
 // ***************************************  МОЕ РЕШЕНИЕ *******************************************
 
 
+// массив (список) в который будем помещать созданные нами устройства (для подсчета мощности
+// и если прибор включен)
+const devices = []
+
+
+// фукнция подсчета общей мощности работающих эл.приборов
+// метод parseInt - преобразует строковый тип (если вдруг мощность строкой напишем)
+// power += число - аналогично power = power + число
+function getAllPowerOn() {
+    let power = 0
+    for (let device of devices) {
+        // условие, что прибор ключен в данный момент
+        if (device.state == 'on'){
+            power += parseInt(device.deviceWattage())
+        }        
+    }
+    console.log('Суммарная мощность работающих эл.приборов: ' + power + 'Вт')
+    return power
+}
+
+
 // создаем общий для всех классов класс с примерно общими свойствами
 // name - название устройства, wattage - мощность его эл.потребления,
 // category - категория (где в доме находится, кухня, комната, гараж), 
 // type - тип (электрический, бензоинструмент), state - состояния прибора в данный момент
 // (on - работает и потребляет энергию,  off - не работает), 
 // метод  turn.OnOff - метод включения или отключения прибора (меняет state)
+// || - две вертикальные черты означают значение по умолчанию, если при создании объекта 
+// данному параметру не были присвоены значения, присвоются эти значения
 
 // конструктор объектов, класс Устройство (Devise)
 class Device {
-    constructor(name, wattage, category, state) {
-        this.name = name || 'not set'
+    constructor(name, wattage, category, type, state) {
+        this.name = name || 'withouth name'
         this.wattage = wattage || 0
         this.category = category || 'home'
         this.type = type || 'electric'
@@ -65,71 +88,70 @@ class Device {
     energeOnOff() {
         if (this.state === 'off') {
             this.state = 'on'
-            console.log(`Устройство - ${this.state} (включено)`)
+            console.log(`Прибор ${this.name} ${this.state}(включен)`)
         }
         else if (this.state = 'on') {
             this.state = 'off'
-            console.log(`Устройство - ${this.state} (выключено)`)
+            console.log(`Прибор ${this.name} ${this.state}(выключен)`)
         }
-        // powerTotal()
+        getAllPowerOn()
     }
 
-    // метод получения информации, если устройство работает (state == 'on')
-    aboutDevice() {
-        if (this.state === 'on') {
-            // usage(this.message)
-            return `Устройство: ${this.name} ${this.category} ${this.type}.`
-        } else return 'Устройство выключено'
+    // метод получения информации
+    aboutDevice() {        
+            return `Это устройство ${this.name}, находится в помещении ${this.category}, относится к типу ${this.type}.`        
     }
 
     deviceWattage() {
-        if (this.state == 'on') return this.wattage
+        if (this.state == 'on') return this.wattage 
         return 0
     }
 }
 
 
-// массив (список) в который будем помещать сознанные нами устройства (для подсчета мощности
-// и если включен)
-const devices = []
-
-
-// фукнция подсчета общей мощности работающих эл.приборов
-// метод parseInt - преобразует строковый тип (мы мощность Вт строкой пишем) в числовой тип
-// power += число - аналогично power = power + число
-function getAllPowerOn() {
-    for (let device of devices) {
-        power += parseInt(device.getPower())
-    }
-    console.log('Суммарная мощность работающих эл.приборов: ' + power + 'Вт')
-    return power
-}
-
-
-
 // создадим новый дочерний класс GarageDevice от класса Device, унаследовав от него часть
 // свойст (от родительского класса) и добавив новый параметр - вес устройства (weight)
 class GarageDevice extends Device {
-    constructor(name, wattage, category, type, state, weight) {
+    constructor(name, wattage, category, type, weight, state) {
         super(
+            name,
             wattage,
-            category,
             type,
             state
         )
-        this.name = name
-        this.wattage = wattage
-        this.category = category
-        this.type = type
-        this.state = state
-        this.weight = weight
+        this.category = category || 'garage'
+        this.weight = weight || 0
+
     }
 
-    aboutDevise() {
-        if (this.state === 'on') {
-            return `Это ${this.name} относится к ${this.category} ${this.type}, 
-      мощностью ${this.wattage} watts and is set to mode ${this.mode}`
-        } else return super.aboutDevise()
+    // новый, переопределенный от родительского метода
+    // метод получения информации об устройстве (отличие от родительсткого наличием weight)
+    aboutDevice = function() {
+        {return `Это прибор: ${this.name}, находится в помещении ${this.category}, относится к типу ${this.type}, мощностью ${this.wattage} и весом ${this.weight}кг`}
     }
 
 }
+
+
+let microwave = new Device('microwave', 2200, 'kitchen');
+let meatGrinder = new Device('meatGrinder', 1700, 'kitchen');
+let blender = new Device('blender', 500, 'kitchen');
+
+let saw = new GarageDevice('saw', 2500, 'garage', 'electric', 5);
+let drill = new GarageDevice('drill', 350, 'garage', 'electric', 5);
+
+console.log('--------------------------------------------------------------------------------');
+console.log(microwave)
+console.log(microwave.deviceWattage())
+microwave.energeOnOff()
+console.log(microwave.aboutDevice())
+console.log(microwave.deviceWattage())
+meatGrinder.energeOnOff()
+meatGrinder.aboutDevice()
+
+console.log('--------------------------------------------------------------------------------');
+console.log(saw.aboutDevice())
+saw.energeOnOff()
+drill.energeOnOff()
+blender.energeOnOff()
+console.log(saw.deviceWattage())
